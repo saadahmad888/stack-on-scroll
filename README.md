@@ -62,7 +62,13 @@ function App() {
 
 export default App;
 ```
+## 📺 Demo
 
+Check out the Stack-on-scroll in action:
+
+[View Demo Site](https://stack-on-scroll.vercel.app/).
+
+![Stack on Scroll Demo](https://s11.gifyu.com/images/SyEJH.gif)
 
 
 ---
@@ -72,7 +78,7 @@ export default App;
 | Option            | Type     | Default  | Description                                                                           |
 |-------------------|----------|----------|---------------------------------------------------------------------------------------|
 | `index`       | `number` | Required | Add index number on "Card" Component.
-|
+
 
 
 ---
