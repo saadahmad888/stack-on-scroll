@@ -15,7 +15,7 @@
     "rollup": "rollup -c --bundleConfigAsCjs"
   },
   "author": "Saad Ahmad",
-  "repository": {},
+  "repository": "https://github.com/saadahmad888/stack-on-scroll.git",
   "license": "ISC",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.1",

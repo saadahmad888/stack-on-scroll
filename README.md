@@ -1,6 +1,6 @@
 # Stack-on-scroll
 
-![npm](https://img.shields.io/npm/v/stack-on-scroll?color=%237159c1) ![npm bundle size](https://img.shields.io/bundlephobia/min/stack-on-scroll) ![license](https://img.shields.io/npm/l/stack-on-scroll) ![issues](https://img.shields.io/github/issues/your-username/stack-on-scroll)
+![npm](https://img.shields.io/npm/v/stack-on-scroll?color=%237159c1) ![npm bundle size](https://img.shields.io/bundlephobia/min/stack-on-scroll) ![license](https://img.shields.io/npm/l/stack-on-scroll) ![issues](https://img.shields.io/github/issues/saadahmad/stack-on-scroll)
 
 **Stack-on-scroll** is a lightweight and customizable JavaScript library to create visually engaging stacking effects as the user scrolls down the page. Ideal for storytelling and interactive layouts, it provides an elegant way to stack elements on top of each other dynamically.
 
@@ -71,25 +71,9 @@ export default App;
 
 | Option            | Type     | Default  | Description                                                                           |
 |-------------------|----------|----------|---------------------------------------------------------------------------------------|
-| `container`       | `string` | Required | Selector for the container that holds the stackable items                             |
-| `items`           | `string` | Required | Selector for the stackable items within the container                                 |
-| `offset`          | `number` | `100`    | Vertical scroll offset (in pixels) for triggering the stacking effect                 |
-| `speed`           | `number` | `0.5`    | Transition speed of stacking effect, ranging from `0` (instant) to `1` (slow)         |
-| `transitionEffect`| `string` | `'fade'` | Type of transition effect for the stacking (`'fade'`, `'slide'`, `'rotate'`, etc.)    |
+| `index`       | `number` | Required | Add index number on "Card" Component.
+|
 
-### Example
-
-```javascript
-import stackOnScroll from 'stack-on-scroll';
-
-stackOnScroll({
-   container: '#my-stack',
-   items: '.my-item',
-   offset: 150,
-   speed: 0.8,
-   transitionEffect: 'slide'
-});
-```
 
 ---
 
@@ -97,16 +81,35 @@ stackOnScroll({
 
 Here's a quick example of how **Stack-on-scroll** can be used for a storytelling effect:
 
-```html
-<div id="my-stack">
-  <div class="my-item">Welcome</div>
-  <div class="my-item">Our Story</div>
-  <div class="my-item">Our Mission</div>
-  <div class="my-item">Get in Touch</div>
-</div>
+```javascript
+import { Card, Outer } from 'stack-on-scroll';
+
+function App() {
+  return (
+    <>
+      <Outer>
+        <Card index={1}>
+
+          // Here is your custom code
+
+        </Card>
+        <Card index={2}>
+          
+          // Here is your custom code
+
+        </Card>
+        <Card index={3}>
+          
+          // Here is your custom code
+        
+        </Card>
+      </Outer>
+    </>
+  );
+}
 ```
 
-For more examples and customization options, check out the [Documentation](https://github.com/your-username/stack-on-scroll/wiki).
+For more examples and customization options, check out the [Documentation](https://github.com/saadahmad888/stack-on-scroll/wiki).
 
 ---
 
@@ -116,7 +119,7 @@ Want to contribute? Great! Follow these steps to set up your local environment:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/stack-on-scroll.git
+   git clone https://github.com/saadahmad888/stack-on-scroll.git
    ```
 
 2. Install dependencies:
@@ -145,3 +148,11 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## 🌟 Support
 
 If you find **Stack-on-scroll** useful, please consider giving it a ⭐ on GitHub or sharing it with others!
+
+---
+
+## Explore More
+
+Discover a collection of unique, modern UI components by [Saad Ahmad](https://isaadahmad.com). Enhance your projects with cutting-edge designs and interactive elements.
+ 
+
