@@ -1,6 +1,6 @@
 {
   "name": "stack-on-scroll",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Reuseable Stack on scroll librabry",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
