@@ -1,4 +1,4 @@
-
+//Index.ts
 import Card from './Card';
 import Outer from './Outer';
 

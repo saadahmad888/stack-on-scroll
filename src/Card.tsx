@@ -11,7 +11,7 @@ const Card: React.FC<CardProps> = ({ children, index }) => {
   const topOffset = `calc(25px * ${index})`; // Adjust the multiplier to control spacing
 
   return (
-    <div className="cardContainer" style={{top: topOffset }}>
+    <div className="cardContainer" style={{ top: topOffset }}>
       {children} {/* Render the children inside the card */}
     </div>
   );
