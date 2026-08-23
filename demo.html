@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>stack-on-scroll — swatch book</title>
+
+    <!--
+      Loads the real built bundle from ./dist, not the source. If this page
+      behaves, the artifact you are about to publish behaves.
+
+      Serve it over HTTP — ES modules do not load from file://
+          npx serve .        →  http://localhost:3000/demo.html
+          python3 -m http.server  →  http://localhost:8000/demo.html
+    -->
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@19.0.0",
+          "react-dom": "https://esm.sh/react-dom@19.0.0",
+          "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+          "react/jsx-runtime": "https://esm.sh/react@19.0.0/jsx-runtime"
+        }
+      }
+    </script>
+
+    <style>
+      :root {
+        --paper: #f2efe9;
+        --ink: #14161a;
+        --rule: #c9c3b8;
+        --chip-1: #0f3b3a;
+        --chip-2: #1d6b63;
+        --chip-3: #6f8f6a;
+        --chip-4: #c9a86a;
+        --chip-5: #b25f3e;
+        --chip-6: #6b3550;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .mono {
+        font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, monospace;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ── Masthead ────────────────────────────────────────────── */
+
+      .masthead {
+        min-height: 78vh;
+        display: grid;
+        align-content: center;
+        gap: 1.5rem;
+        padding: 4rem clamp(1.25rem, 5vw, 6rem) 3rem;
+        max-width: 60rem;
+      }
+
+      .eyebrow {
+        font-size: 0.7rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #6a6459;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.75rem, 9vw, 6.5rem);
+        line-height: 0.9;
+        letter-spacing: -0.045em;
+        font-weight: 800;
+      }
+
+      h1 em {
+        font-style: normal;
+        color: var(--chip-2);
+      }
+
+      .lede {
+        max-width: 34rem;
+        font-size: clamp(1rem, 2vw, 1.15rem);
+        line-height: 1.55;
+        color: #3b3a36;
+      }
+
+      .scroll-cue {
+        font-size: 0.7rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #6a6459;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+
+      .scroll-cue::after {
+        content: "";
+        flex: 1;
+        max-width: 8rem;
+        height: 1px;
+        background: var(--rule);
+      }
+
+      /* ── Control panel ───────────────────────────────────────── */
+
+      .panel {
+        position: fixed;
+        right: clamp(0.75rem, 2vw, 1.5rem);
+        bottom: clamp(0.75rem, 2vw, 1.5rem);
+        z-index: 50;
+        width: min(19rem, calc(100vw - 1.5rem));
+        background: rgb(255 255 255 / 0.92);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--rule);
+        border-radius: 4px;
+        padding: 1rem 1.1rem 1.15rem;
+        box-shadow: 0 12px 40px rgb(20 22 26 / 0.14);
+        font-size: 0.8rem;
+      }
+
+      .panel h2 {
+        margin: 0 0 0.85rem;
+        font-size: 0.65rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #6a6459;
+        font-weight: 600;
+      }
+
+      .control {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 0.15rem 0.5rem;
+        align-items: center;
+        margin-bottom: 0.7rem;
+      }
+
+      .control label {
+        font-size: 0.72rem;
+      }
+
+      .control .value {
+        font-size: 0.72rem;
+        color: var(--chip-2);
+      }
+
+      .control input[type="range"] {
+        grid-column: 1 / -1;
+        width: 100%;
+        accent-color: var(--chip-2);
+        margin: 0;
+      }
+
+      .toggles {
+        display: flex;
+        gap: 0.4rem;
+        margin-top: 0.9rem;
+        padding-top: 0.9rem;
+        border-top: 1px solid var(--rule);
+      }
+
+      .toggles button {
+        flex: 1;
+        font: inherit;
+        font-size: 0.7rem;
+        padding: 0.4rem 0.3rem;
+        border: 1px solid var(--rule);
+        border-radius: 3px;
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+      }
+
+      .toggles button[aria-pressed="true"] {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--paper);
+      }
+
+      .toggles button:focus-visible,
+      .panel input:focus-visible {
+        outline: 2px solid var(--chip-2);
+        outline-offset: 2px;
+      }
+
+      /* ── Chips ───────────────────────────────────────────────── */
+
+      .chip {
+        width: min(52rem, calc(100vw - clamp(1.5rem, 8vw, 10rem)));
+        height: min(72vh, 34rem);
+        border-radius: 6px;
+        padding: clamp(1.5rem, 4vw, 2.75rem);
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        color: #f6f3ec;
+        box-shadow: 0 -1px 0 rgb(255 255 255 / 0.25) inset, 0 18px 50px rgb(20 22 26 / 0.28);
+      }
+
+      .chip-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        opacity: 0.75;
+      }
+
+      .chip-title {
+        align-self: center;
+        margin: 0;
+        font-size: clamp(1.75rem, 4.5vw, 3rem);
+        line-height: 1;
+        letter-spacing: -0.035em;
+        font-weight: 700;
+      }
+
+      .chip-note {
+        margin: 0.7rem 0 0;
+        max-width: 30rem;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        opacity: 0.82;
+      }
+
+      .chip-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 1rem;
+        font-size: 0.72rem;
+        border-top: 1px solid rgb(255 255 255 / 0.22);
+        padding-top: 0.8rem;
+      }
+
+      .readout {
+        text-align: right;
+        white-space: nowrap;
+      }
+
+      .readout strong {
+        display: block;
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .tail {
+        min-height: 60vh;
+        display: grid;
+        place-content: center;
+        gap: 0.75rem;
+        text-align: center;
+        padding: 4rem 1.5rem;
+        color: #6a6459;
+        font-size: 0.8rem;
+      }
+
+      .error {
+        margin: 3rem auto;
+        max-width: 40rem;
+        padding: 1.25rem;
+        border: 1px solid var(--chip-5);
+        border-radius: 4px;
+        background: #fff;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="module">
+      import React, { useState, useRef, useCallback } from "react";
+      import { createRoot } from "react-dom/client";
+      import htm from "https://esm.sh/htm@3.1.1";
+
+      const html = htm.bind(React.createElement);
+      const root = createRoot(document.getElementById("root"));
+
+      let lib;
+      try {
+        lib = await import("./dist/index.js");
+      } catch (error) {
+        root.render(
+          html`<div class="error">
+            <strong>Could not load ./dist/index.js</strong>
+            <p>Run <code class="mono">npm run build</code> first, then serve this
+            folder over HTTP — ES modules do not load from a <code
+            class="mono">file://</code> URL.</p>
+            <p class="mono" style="color:#b25f3e">${String(error)}</p>
+          </div>`,
+        );
+        throw error;
+      }
+
+      const { StackContainer, StackCard, useStackProgress } = lib;
+
+      const CHIPS = [
+        {
+          code: "SOS-01",
+          name: "Deep Ink",
+          hex: "#0f3b3a",
+          note: "Every card is position: sticky at an offset derived from its place in the stack. That is the whole trick, and it costs no JavaScript.",
+        },
+        {
+          code: "SOS-02",
+          name: "Verdigris",
+          hex: "#1d6b63",
+          note: "Nothing here passes an index prop. The container counts its children, so cards generated from an array number themselves.",
+        },
+        {
+          code: "SOS-03",
+          name: "Sage",
+          hex: "#6f8f6a",
+          note: "Scale, fade, and tilt are opt-in. Set them all to zero with the sliders and every scroll listener detaches.",
+        },
+        {
+          code: "SOS-04",
+          name: "Ochre",
+          hex: "#c9a86a",
+          note: "The percentage on the right comes from useStackProgress. It updates inside a shared animation frame and never re-renders this component.",
+        },
+        {
+          code: "SOS-05",
+          name: "Red Clay",
+          hex: "#b25f3e",
+          note: "Turn on prefers-reduced-motion in your OS settings. Scale and rotation stop; the fade keeps going, because a cross-fade is not motion.",
+        },
+        {
+          code: "SOS-06",
+          name: "Aubergine",
+          hex: "#6b3550",
+          note: "The last card is never covered, so its readout stays at zero. Give it room to scroll against.",
+        },
+      ];
+
+      function Slider({ label, value, min, max, step, unit, onChange }) {
+        return html`
+          <div class="control">
+            <label for=${label}>${label}</label>
+            <span class="value mono">${value}${unit}</span>
+            <input
+              id=${label}
+              type="range"
+              min=${min}
+              max=${max}
+              step=${step}
+              value=${value}
+              onInput=${(event) => onChange(Number(event.target.value))}
+            />
+          </div>
+        `;
+      }
+
+      function Chip({ chip, offset }) {
+        const readoutRef = useRef(null);
+
+        const onProgress = useCallback((progress) => {
+          if (readoutRef.current) {
+            readoutRef.current.textContent = `${Math.round(progress * 100)}%`;
+          }
+        }, []);
+
+        const ref = useStackProgress({ onProgress, offset });
+
+        return html`
+          <${StackCard}
+            ref=${ref}
+            innerStyle=${{ alignItems: "center" }}
+            aria-label=${`${chip.code} ${chip.name}`}
+          >
+            <article class="chip" style=${{ background: chip.hex }}>
+              <div class="chip-top">
+                <span class="mono">${chip.code}</span>
+                <span class="mono">${chip.hex}</span>
+              </div>
+
+              <div>
+                <h2 class="chip-title">${chip.name}</h2>
+                <p class="chip-note">${chip.note}</p>
+              </div>
+
+              <div class="chip-bottom">
+                <span class="mono">position: sticky</span>
+                <div class="readout mono">
+                  <strong ref=${readoutRef}>0%</strong>
+                  covered
+                </div>
+              </div>
+            </article>
+          <//>
+        `;
+      }
+
+      function Demo() {
+        const [offset, setOffset] = useState(28);
+        const [scaleStep, setScaleStep] = useState(0.07);
+        const [fadeStep, setFadeStep] = useState(0.35);
+        const [rotateStep, setRotateStep] = useState(0);
+        const [stackFrom, setStackFrom] = useState("top");
+        const [respect, setRespect] = useState(true);
+
+        return html`
+          <header class="masthead">
+            <p class="eyebrow">stack-on-scroll v2</p>
+            <h1>A swatch book<br />you <em>scroll</em>.</h1>
+            <p class="lede">
+              Six chips, each pinned a little lower than the one before it. Drag the
+              sliders to change the deal — every control below maps to a single prop.
+            </p>
+            <p class="scroll-cue">Scroll</p>
+          </header>
+
+          <aside class="panel" aria-label="Live controls">
+            <h2>Props</h2>
+
+            <${Slider} label="offset" value=${offset} min="0" max="80" step="1"
+              unit="px" onChange=${setOffset} />
+            <${Slider} label="scaleStep" value=${scaleStep} min="0" max="0.3"
+              step="0.01" unit="" onChange=${setScaleStep} />
+            <${Slider} label="fadeStep" value=${fadeStep} min="0" max="0.9"
+              step="0.05" unit="" onChange=${setFadeStep} />
+            <${Slider} label="rotateStep" value=${rotateStep} min="-6" max="6"
+              step="0.5" unit="deg" onChange=${setRotateStep} />
+
+            <div class="toggles">
+              <button
+                type="button"
+                aria-pressed=${stackFrom === "top"}
+                onClick=${() => setStackFrom(stackFrom === "top" ? "bottom" : "top")}
+              >
+                from ${stackFrom}
+              </button>
+              <button
+                type="button"
+                aria-pressed=${respect}
+                onClick=${() => setRespect(!respect)}
+              >
+                respect motion
+              </button>
+            </div>
+          </aside>
+
+          <${StackContainer}
+            offset=${offset}
+            scaleStep=${scaleStep}
+            fadeStep=${fadeStep}
+            rotateStep=${rotateStep}
+            stackFrom=${stackFrom}
+            respectReducedMotion=${respect}
+            height="100svh"
+          >
+            ${CHIPS.map(
+              (chip) => html`<${Chip} key=${chip.code} chip=${chip} offset=${offset} />`,
+            )}
+          <//>
+
+          <footer class="tail">
+            <p class="mono">end of deck</p>
+            <p>
+              Resize the window, tab through the panel, and try it on a phone before
+              you publish.
+            </p>
+          </footer>
+        `;
+      }
+
+      root.render(html`<${Demo} />`);
+    </script>
+  </body>
+</html>

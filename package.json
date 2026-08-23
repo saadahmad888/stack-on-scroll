@@ -1,36 +1,86 @@
 {
   "name": "stack-on-scroll",
-  "version": "1.0.5",
-  "description": "Reuseable Stack on scroll librabry",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "files": [
-    "./dist",
-    "./package.json",
-    "./README.md"
+  "version": "2.0.0",
+  "description": "Sticky scroll-stacking cards for React. Zero dependencies, zero config, and no JavaScript on the default path.",
+  "keywords": [
+    "react",
+    "scroll",
+    "sticky",
+    "stacking-cards",
+    "stack-cards",
+    "scroll-animation",
+    "scrollytelling",
+    "parallax",
+    "react-component",
+    "typescript"
   ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "rollup": "rollup -c --bundleConfigAsCjs"
-  },
+  "license": "MIT",
   "author": "Saad Ahmad",
-  "repository": "https://github.com/saadahmad888/stack-on-scroll.git",
-  "license": "ISC",
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.3",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.2",
-    "react": "^19.1.0",
-    "rollup-plugin-dts": "^6.2.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "tslib": "^2.8.1",
-    "typescript": "^5.8.3"
+  "homepage": "https://github.com/saadahmad888/stack-on-scroll#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saadahmad888/stack-on-scroll.git"
   },
-  "dependencies": {
-    "@types/react": "^19.1.2",
-    "rollup": "^4.40.1",
-    "rollup-plugin-postcss": "^4.0.2"
+  "bugs": {
+    "url": "https://github.com/saadahmad888/stack-on-scroll/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "build": "tsup && node scripts/add-use-client.mjs",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint:package": "publint --strict && attw --pack .",
+    "verify": "npm run build && npm run typecheck && npm run test && npm run lint:package",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^22.20.1",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "jsdom": "^25.0.1",
+    "publint": "^0.3.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
