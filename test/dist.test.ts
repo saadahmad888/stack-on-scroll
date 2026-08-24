@@ -131,7 +131,7 @@ describe('package manifest', () => {
     }
   });
 
-  it('declares a supported Node range', () => {
-    expect(pkg.engines.node).toBe('>=20.19');
+  it("declares a supported Node range", () => {
+    expect(pkg.engines.node).toBe('>=22');
   });
 });

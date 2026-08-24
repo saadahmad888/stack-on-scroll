@@ -48,7 +48,7 @@ export function computeProgress(element: HTMLElement, offset: number): number {
  */
 export function useStackProgress<T extends HTMLElement = HTMLElement>(
   options: UseStackProgressOptions = {},
-): React.RefObject<T | null> {
+): React.MutableRefObject<T | null> {
   const { onProgress, offset = 25, disabled = false } = options;
 
   const ref = useRef<T>(null);

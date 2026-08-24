@@ -1,6 +1,6 @@
 {
   "name": "stack-on-scroll",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Sticky scroll-stacking cards for React. Zero dependencies, zero config, and no JavaScript on the default path.",
   "keywords": [
     "react",
@@ -49,7 +49,7 @@
     "LICENSE"
   ],
   "engines": {
-    "node": ">=20.19"
+    "node": ">=22"
   },
   "scripts": {
     "build": "tsup && node scripts/add-use-client.mjs",
@@ -80,6 +80,7 @@
     "vitest": "^2.1.8"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true
   }
 }

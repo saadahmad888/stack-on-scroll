@@ -67,7 +67,17 @@ jobs:
       - run: npm ci
 
       - name: Install React ${{ matrix.react }}
-        run: npm install --no-save react@${{ matrix.react }} react-dom@${{ matrix.react }}
+        run: |
+          npm install --no-save \
+            react@${{ matrix.react }} \
+            react-dom@${{ matrix.react }} \
+            @types/react@${{ matrix.react }} \
+            @types/react-dom@${{ matrix.react }}
 
       - run: npm run build
+
+      # Typechecking here is the point: React 18 and 19 model refs
+      # differently, and only tsc sees the difference.
+      - run: npm run typecheck
+
       - run: npm test

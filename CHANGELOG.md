@@ -1,5 +1,27 @@
 # Changelog
 
+## 2.0.1
+
+### Fixed
+
+- **`useStackProgress` now typechecks under `@types/react` 18.** It returned
+  `RefObject<T | null>`, which React 19's types accept but React 18's do not:
+  React 18 measures `RefObject` as covariant, so the value was rejected
+  anywhere a `RefObject<HTMLElement>` was expected. Passing the hook's ref to a
+  `StackCard` failed to compile for every TypeScript user on React 18, despite
+  the peer range claiming `>=18`. The return type is now
+  `MutableRefObject<T | null>`, which both majors accept. Runtime behaviour is
+  unchanged.
+- **Added `test/types/consumer.tsx`**, a compile-only fixture covering the ref
+  pattern that broke, and CI now installs matching `@types/react` and runs
+  `tsc` for each React major. The previous React 18 job only ran the tests,
+  which do not typecheck against 18 — which is how this shipped.
+
+### Changed
+
+- **`engines.node` raised from `>=20.19` to `>=22`.** Node 20 reached end of
+  life on 30 April 2026. CI builds on 22, 24, and 26.
+
 ## 2.0.0
 
 ### Fixed

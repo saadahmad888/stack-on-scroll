@@ -4,6 +4,9 @@ Sticky scroll-stacking cards for React. Each card pins itself a little lower
 than the one before it, so scrolling deals them into a fanned pile with every
 card's top edge still showing.
 
+**[See it running →](https://stack-on-scroll.vercel.app/)** — a live demo with sliders for
+every prop, so you can feel what each one does before installing anything.
+
 [![npm](https://img.shields.io/npm/v/stack-on-scroll)](https://www.npmjs.com/package/stack-on-scroll)
 [![license](https://img.shields.io/npm/l/stack-on-scroll)](./LICENSE)
 
@@ -24,7 +27,7 @@ card's top edge still showing.
 npm install stack-on-scroll
 ```
 
-React 18 or newer. Node 20.19 or newer to build from source.
+React 18 or newer. Node 22 or newer to build from source.
 
 ## Use it
 
@@ -225,8 +228,17 @@ npm run verify   # typecheck, build, test, and lint the package manifest
 ```
 
 `npm run test:watch` while you work. `demo.html` opens in a browser with no
-build step and exercises every prop against the built bundle.
+build step and exercises every prop against the built bundle — serve it over
+HTTP, since ES modules will not load from `file://`:
+
+```bash
+npm run build
+npx serve .        # http://localhost:3000/demo.html
+```
+
+The hosted version at [stack-on-scroll.vercel.app](https://stack-on-scroll.vercel.app/)
+lives in [its own repository](https://github.com/saadahmad888/stacks).
 
 ## License
 
-MIT © Saad Ahmad
+MIT © [Saad Ahmad](https://isaadahmad.com)
