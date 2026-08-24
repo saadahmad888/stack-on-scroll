@@ -1,6 +1,6 @@
 {
   "name": "stack-on-scroll",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Sticky scroll-stacking cards for React. Zero dependencies, zero config, and no JavaScript on the default path.",
   "keywords": [
     "react",
